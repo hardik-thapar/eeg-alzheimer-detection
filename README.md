@@ -1,14 +1,12 @@
-# EEG-Based Alzheimer's Disease Detection
+# EEG Alzheimer's Detection
 
-Research project investigating deep learning approaches for 
-EEG-based Alzheimer's Disease detection.
+A research project focused on detecting Alzheimer's Disease using EEG signals. It compares traditional machine learning (SVM) and deep learning (EEGNet) approaches using strict Leave-One-Subject-Out (LOSO) evaluation.
 
-**Supervisor:** Assoc. Prof. Chang Kang-Ming, NKUST, Taiwan  
-**Researcher:** Hardik Thapar, Chitkara University, India  
-**Status:** Active — Week 2
+## Project Status
+- **Baseline:** SVM + RBP features (Optimized for speed)
+- **Deep Learning:** EEGNet (In progress)
 
-## Repository Structure
-- `notebooks/` — Exploratory analysis and experiments
-- `src/` — Reusable code modules
-- `data/` — Dataset info (data files not tracked)
-- `results/` — Plots and metrics
+## Structure
+- `noteboks/`: Jupyter notebooks for experiments and baselines.
+- `results/`: Generated metrics and visualizations.
+- `data/`: Dataset configuration and derivatives (not tracked).
