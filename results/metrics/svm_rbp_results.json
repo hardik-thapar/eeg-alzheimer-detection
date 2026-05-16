@@ -1,0 +1,20 @@
+{
+  "accuracy": 83.08,
+  "f1_weighted": 82.95,
+  "f1_macro": 82.67,
+  "ad_precision": 82.1,
+  "ad_recall": 88.9,
+  "hc_precision": 84.6,
+  "hc_recall": 75.9,
+  "evaluation": "LOSO",
+  "confusion_matrix": [
+    [
+      32,
+      4
+    ],
+    [
+      7,
+      22
+    ]
+  ]
+}
