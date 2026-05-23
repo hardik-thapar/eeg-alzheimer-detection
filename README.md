@@ -1,112 +1,105 @@
-# EEG-Based Alzheimer's Disease Detection
+<div align="center">
+  <h1>🧠 EEG-Based Alzheimer's Disease Detection</h1>
+  
+  <p>
+    <strong>Robust Classification of Alzheimer's Disease using Resting-State EEG under Strict Subject-Level Evaluation</strong>
+  </p>
+  
+  [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
+  [![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=PyTorch&logoColor=white)](https://pytorch.org/)
+  [![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Research on automated Alzheimer's disease classification from 
-resting-state EEG signals using classical machine learning and 
-deep learning approaches, with rigorous subject-level evaluation.
+</div>
 
-Conducted under the supervision of Prof. Kang-Ming Chang,
-National Kaohsiung University of Science and Technology (NKUST), Taiwan.
+<br />
 
----
-
-## Overview
-
-This repository contains the complete experimental pipeline for 
-binary classification of Alzheimer's disease (AD) versus healthy 
-controls (HC) using 19-channel resting-state EEG. All models are 
-evaluated under strict subject-level leave-one-subject-out (LOSO) 
-cross-validation with no epoch-level data leakage.
-
-A key finding of this work is that standard epoch-level evaluation, 
-commonly used in published EEG-AD literature, inflates reported 
-accuracy by approximately 9.4 percentage points compared to honest 
-subject-level evaluation.
+> **Research conducted under the supervision of Prof. Kang-Ming Chang, National Kaohsiung University of Science and Technology (NKUST), Taiwan.**
 
 ---
 
-## Dataset
+## 🔬 Overview
 
-Primary: OpenNeuro ds004504
-- 88 subjects: 36 AD, 23 FTD, 29 HC
-- 19 channels, 500 Hz, resting-state eyes-closed EEG
-- Freely available at: https://openneuro.org/datasets/ds004504
-- Binary task uses 65 subjects (AD vs HC)
+This repository contains a complete, research-grade pipeline for the **binary classification of Alzheimer's disease (AD) versus healthy controls (HC)** using 19-channel resting-state EEG signals.
 
-The dataset is not included in this repository. Download from 
-OpenNeuro and place under data/ds004504/.
+A critical contribution of this work is addressing the widespread issue of **epoch-level data leakage** in EEG-AD literature. We demonstrate that standard epoch-level evaluation artificially inflates accuracy by ~9.4 percentage points. To ensure clinical validity, all models in this repository are evaluated under a strict **subject-level Leave-One-Subject-Out (LOSO)** cross-validation protocol.
+
+![Model Comparison](results/figures/fig1_model_comparison.png)
+*Figure 1: Comparison of baseline models and the proposed Hybrid SIR-EEGNet.*
 
 ---
 
-## Results
+## 🏗️ Model Architecture: Hybrid SIR-EEGNet
 
-Binary AD vs HC classification, subject-level LOSO, ds004504 (N=65):
+We propose the **Hybrid SIR-EEGNet**, which integrates:
+1. **EEGNet Backbone**: For spatial-temporal feature learning directly from raw EEG.
+2. **Relative Band Power (RBP) Branch**: Explicitly encoding known clinical AD biomarkers.
+3. **Gradient Reversal Layer (GRL)**: For subject-adversarial training.
 
-| Model              | Accuracy | F1 (W) | AD Recall |
-|--------------------|----------|--------|-----------|
-| SVM + RBP          | 83.1%    | 83.0%  | 88.9%     |
-| EEGNet             | 78.5%    | —      | —         |
-| Hybrid SIR-EEGNet  | 81.5%    | 81.3%  | 88.9%     |
+Following Ganin et al. (2016), the GRL forces the shared feature extractor to learn disease-relevant representations that are robust and invariant to subject-specific noise.
 
-Leakage demonstration: epoch-level CV reports 92.5% vs 83.1% 
-under correct subject-level evaluation — a 9.4pp inflation.
-
----
-
-## Notebooks
-
-| Notebook | Description |
-|----------|-------------|
-| 01_data_exploration | Dataset loading, EDA, DTABR biomarker analysis |
-| 02_svm_baseline_loso | SVM + RBP features, strict LOSO evaluation |
-| 03_eegnet_loso | EEGNet baseline under LOSO |
-| 04_sir_eegnet_loso | Hybrid SIR-EEGNet proposed model trained on ds04504 and tested on ds04504 |
-| 05_sir_eegnet_cross_dataset_FSU | Hybrid SIR-EEGNet proposed model trained on ds04504 and tested on FSU dataset |
-| 06_sir_eegnet_cross_dataset_ADSZ | Hybrid SIR-EEGNet proposed model trained on ds04504 and tested on ADSZ dataset |
+![Confusion Matrices](results/figures/fig3_confusion_matrices.png)
+*Figure 2: Confusion Matrices displaying the robust predictive power on AD subjects.*
 
 ---
 
-## Model Architecture
+## 📊 Key Results
 
-Hybrid SIR-EEGNet combines:
-- EEGNet backbone for temporal-spatial feature learning from raw EEG
-- Relative Band Power (RBP) branch encoding known AD biomarkers
-- Gradient Reversal Layer (GRL) for subject-adversarial training
+Binary classification on the OpenNeuro ds004504 dataset (N=65), employing rigorous subject-level LOSO:
 
-The GRL forces the shared feature extractor to learn 
-disease-relevant representations that are invariant to 
-subject-specific noise, following Ganin et al. (2016).
+| Model | Accuracy | F1 (W) | AD Recall |
+|---|---|---|---|
+| **SVM + RBP** | 83.1% | 83.0% | 88.9% |
+| **EEGNet** | 78.5% | — | — |
+| **Hybrid SIR-EEGNet** | **81.5%** | **81.3%** | **88.9%** |
 
----
+![Leakage Demonstration](results/figures/fig2_leakage_demonstration.png)
+*Figure 3: Demonstration of accuracy inflation due to data leakage in epoch-level CV.*
 
-## Evaluation Protocol
-
-All models use strict subject-level LOSO:
-- Each fold leaves one subject entirely out for testing
-- Scaler fitted on training subjects only
-- Epoch-level predictions aggregated by majority vote
-- Zero subject leakage guaranteed
+> **For a detailed breakdown of our findings, including cross-dataset generalization metrics, please see our [Results Documentation](results.md).**
 
 ---
 
-## Requirements
+## 📚 Project Documentation
 
-Python 3.9+, MNE-Python, PyTorch, scikit-learn, scipy, 
-numpy, pandas, matplotlib, seaborn
+We have modularized our documentation for deeper technical dives:
 
----
-
-## Citation
-
-If you use this code, please cite the ds004504 dataset:
-
-Miltiadous et al. (2023). A Dataset of Scalp EEG Recordings 
-of Alzheimer's Disease, Frontotemporal Dementia and Healthy 
-Subjects. Data, 8(6), 95.
+- 📖 [**Methodology**](methodology.md): Detailed explanation of our LOSO protocol, preprocessing pipeline, and feature extraction.
+- 📈 [**Results**](results.md): Comprehensive metrics, statistical tests, and cross-dataset evaluations (FSU, ADSZ).
+- 🗄️ [**Datasets**](datasets.md): Information regarding the primary and external datasets utilized in this research.
 
 ---
 
-## Acknowledgements
+## 📓 Notebooks
 
-This work was conducted under the supervision of Prof. Kang-Ming 
-Chang, Department of Computer and Communication Engineering, 
-National Kaohsiung University of Science and Technology, Taiwan.
+Our pipeline is organized sequentially into Jupyter Notebooks:
+
+| # | Notebook | Description |
+|---|----------|-------------|
+| 1 | `01_data_exploration` | Dataset loading, Exploratory Data Analysis (EDA), and DTABR biomarker analysis. |
+| 2 | `02_svm_baseline_loso` | SVM + RBP features, strict LOSO evaluation. |
+| 3 | `03_eegnet_loso` | EEGNet baseline under LOSO evaluation. |
+| 4 | `04_sir_eegnet_loso` | Hybrid SIR-EEGNet model training and evaluation (ds004504). |
+| 5 | `05_SIREEGNet_CrossDataset_ADSZ` | Hybrid SIR-EEGNet cross-dataset testing on the ADSZ dataset. |
+| 6 | `06_SIREEGNet_CrossDataset_FSU` | Hybrid SIR-EEGNet cross-dataset testing on the FSU dataset. |
+
+---
+
+## ⚙️ Requirements
+
+- Python 3.9+
+- MNE-Python, PyTorch, scikit-learn, scipy, numpy, pandas, matplotlib, seaborn
+
+---
+
+## 📝 Citation
+
+If you use this code, please cite the primary dataset:
+
+> Miltiadous et al. (2023). A Dataset of Scalp EEG Recordings of Alzheimer's Disease, Frontotemporal Dementia and Healthy Subjects. *Data, 8(6), 95*.
+
+---
+
+## 🙏 Acknowledgements
+
+This research was conducted at the **Department of Computer and Communication Engineering, National Kaohsiung University of Science and Technology, Taiwan**.
