@@ -38,8 +38,11 @@ We propose the **Hybrid SIR-EEGNet**, which integrates:
 
 Following Ganin et al. (2016), the GRL forces the shared feature extractor to learn disease-relevant representations that are robust and invariant to subject-specific noise.
 
+![SIR-EEGNet Architecture](results/figures/sir_eegnet_architecture.jpg)
+*Figure 2: Schematic of the proposed Hybrid SIR-EEGNet architecture containing the EEGNet stream, RBP feature projection, feature concatenation, and dual prediction heads (disease classification and subject-adversarial GRL).*
+
 ![Confusion Matrices](results/figures/fig3_confusion_matrices.png)
-*Figure 2: Confusion Matrices displaying the robust predictive power on AD subjects.*
+*Figure 3: Confusion Matrices displaying the robust predictive power on AD subjects.*
 
 ---
 
@@ -54,7 +57,7 @@ Binary classification on the OpenNeuro ds004504 dataset (N=65), employing rigoro
 | **Hybrid SIR-EEGNet** | **81.5%** | **81.3%** | **88.9%** |
 
 ![Leakage Demonstration](results/figures/fig2_leakage_demonstration.png)
-*Figure 3: Demonstration of accuracy inflation due to data leakage in epoch-level CV.*
+*Figure 4: Demonstration of accuracy inflation due to data leakage in epoch-level CV.*
 
 > **For a detailed breakdown of our findings, including cross-dataset generalization metrics, please see our [Results Documentation](results.md).**
 
